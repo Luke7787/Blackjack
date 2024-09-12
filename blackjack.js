@@ -118,11 +118,22 @@ function hit() {
     yourSum = reduceAce(yourSum, yourAceCount);
     document.getElementById("your-sum").innerText = yourSum;
 
-    if (yourSum > 21) {
+    // Disable hitting if the sum is 21 or greater
+    if (yourSum >= 21) {
         canHit = false;
-        endGame(); // You lose if you exceed 21
+        if (yourSum > 21) {
+            endGame(); // End the game because the player busted
+        } else if (yourSum === 21) {
+            document.getElementById("results").innerText = "You've hit 21, no more hits allowed.";
+            // Optionally, you could trigger the dealer to play if you want to end the round here
+            setTimeout(() => {
+                revealHiddenCard();
+                playDealerTurn();
+            }, 1000); // Delay before starting dealer's turn
+        }
     }
 }
+
 
 function stay() {
     canHit = false;
