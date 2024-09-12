@@ -6,8 +6,44 @@
     <title>Blackjack</title>
     <link rel="stylesheet" href="blackjack.css">
     <script src="blackjack.js" defer></script>
+    <style>
+        /* Add some basic styling for the balance display and add funds section */
+        #balance-container {
+            margin: 20px;
+            font-family: Arial, sans-serif;
+        }
+        #balance {
+            font-size: 24px;
+        }
+        #add-funds-container {
+            display: none;
+            position: absolute;
+            top: 20%;
+            left: 20%;
+            padding: 20px;
+            border: 2px solid #000;
+            background-color: #fff;
+            z-index: 1000;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        #add-funds-container input {
+            margin-right: 10px;
+        }
+    </style>
 </head>
 <body>
+    <div id="balance-container">
+        <h2>Balance: $<span id="balance">0</span></h2>
+        <button id="add-funds-btn">Add Funds</button>
+    </div>
+
+    <div id="add-funds-container">
+        <h3>Add Funds</h3>
+        <input type="number" id="add-funds" placeholder="Enter amount" />
+        <button id="confirm-add">Add</button>
+        <button id="cancel-add">Cancel</button>
+    </div>
+
     <h2>Dealer: <span id="dealer-sum"></span></h2>
     <div id="dealer-cards">
         <img id="hidden" src="./cards/BACK.png">
@@ -20,5 +56,31 @@
     <button id="hit">Hit</button>
     <button id="stay">Stay</button>
     <p id="results"></p>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Initialize Add Funds Button
+            document.getElementById("add-funds-btn").addEventListener("click", function() {
+                document.getElementById("add-funds-container").style.display = "block";
+            });
+
+            // Initialize Cancel Button
+            document.getElementById("cancel-add").addEventListener("click", function() {
+                document.getElementById("add-funds-container").style.display = "none";
+            });
+
+            // Initialize Confirm Button
+            document.getElementById("confirm-add").addEventListener("click", function() {
+                let amount = parseFloat(document.getElementById("add-funds").value);
+                if (isNaN(amount) || amount <= 0) {
+                    alert("Please enter a valid amount.");
+                    return;
+                }
+                balance += amount;
+                updateBalanceDisplay();
+                document.getElementById("add-funds-container").style.display = "none";
+            });
+        });
+    </script>
 </body>
 </html>

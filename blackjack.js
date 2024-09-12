@@ -9,10 +9,13 @@ let deck;
 
 let canHit = true; // Player can draw cards while their total is <= 21
 
+let balance = 100; // Starting balance (example amount)
+
 window.onload = function() {
     buildDeck();
     shuffleDeck();
     startGame();
+    updateBalanceDisplay(); // Show initial balance
 };
 
 function buildDeck() {
@@ -37,6 +40,12 @@ function shuffleDeck() {
 }
 
 function startGame() {
+    if (balance <= 0) {
+        alert("Insufficient funds. Please add more funds.");
+        showAddFunds();
+        return;
+    }
+
     // Dealer's initial cards: one hidden, one face-up
     hidden = deck.pop();
     dealerSum += getValue(hidden);
@@ -143,24 +152,29 @@ function playDealerTurn() {
 }
 
 function endGame() {
-    // If the game is over, we check for the final results
     let message = "";
 
     if (yourSum > 21) {
         message = "You Lose!";
+        balance -= 10; // Deduct funds if the player loses
     } else if (dealerSum > 21) {
         message = "Dealer Busts! You Win!";
+        balance += 10; // Add funds if the dealer busts
     } else if (dealerSum === 21 && dealerAceCount === 1 && (yourSum !== 21 || yourAceCount !== 1)) {
         message = "Dealer has Blackjack! You Lose!";
+        balance -= 10; // Deduct funds if the dealer has Blackjack
     } else if (yourSum === dealerSum) {
         message = "Tie!";
     } else if (yourSum > dealerSum) {
         message = "You Win!";
+        balance += 10; // Add funds if the player wins
     } else {
         message = "You Lose!";
+        balance -= 10; // Deduct funds if the dealer wins
     }
 
     document.getElementById("results").innerText = message;
+    updateBalanceDisplay(); // Update balance display after game ends
 }
 
 function getValue(card) {
@@ -187,4 +201,27 @@ function reduceAce(playerSum, playerAceCount) {
         playerAceCount -= 1;
     }
     return playerSum;
+}
+
+function updateBalanceDisplay() {
+    document.getElementById("balance").innerText = balance;
+}
+
+function showAddFunds() {
+    document.getElementById("add-funds-container").style.display = "block";
+}
+
+function hideAddFunds() {
+    document.getElementById("add-funds-container").style.display = "none";
+}
+
+function addFunds() {
+    let amount = parseFloat(document.getElementById("add-funds").value);
+    if (isNaN(amount) || amount <= 0) {
+        alert("Please enter a valid amount.");
+        return;
+    }
+    balance += amount;
+    updateBalanceDisplay();
+    hideAddFunds();
 }
