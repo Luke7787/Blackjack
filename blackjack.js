@@ -62,6 +62,8 @@ function startGame() {
     document.getElementById("hit").addEventListener("click", hit);
     document.getElementById("stay").addEventListener("click", stay);
 
+    // Update player's sum, adjusting for Ace values
+    yourSum = reduceAce(yourSum, yourAceCount);
     document.getElementById("your-sum").innerText = yourSum;
 }
 
@@ -76,9 +78,11 @@ function hit() {
     cardImg.src = "./cards/" + card + ".png";
     document.getElementById("your-cards").append(cardImg);
 
+    // Update sum and check Ace
+    yourSum = reduceAce(yourSum, yourAceCount);
     document.getElementById("your-sum").innerText = yourSum;
 
-    if (reduceAce(yourSum, yourAceCount) > 21) {
+    if (yourSum > 21) {
         canHit = false;
         endGame(); // You lose if you exceed 21
     }
@@ -110,7 +114,7 @@ function playDealerTurn() {
             cardImg.src = "./cards/" + card + ".png";
             document.getElementById("dealer-cards").append(cardImg);
 
-            // Update dealer's sum after each card drawn
+            // Update dealer's sum and adjust for Ace
             dealerSum = reduceAce(dealerSum, dealerAceCount);
             document.getElementById("dealer-sum").innerText = dealerSum;
         } else {
@@ -144,7 +148,7 @@ function getValue(card) {
 
     if (isNaN(value)) { // A, J, Q, K
         if (value == "A") {
-            return 11;
+            return 11; // Default Ace as 11
         }
         return 10;
     }
@@ -155,9 +159,10 @@ function checkAce(card) {
     return card[0] == "A" ? 1 : 0;
 }
 
+// Adjust sum for Ace values. If sum > 21 and there are Aces, treat Ace as 1.
 function reduceAce(playerSum, playerAceCount) {
     while (playerSum > 21 && playerAceCount > 0) {
-        playerSum -= 10;
+        playerSum -= 10; // Convert an Ace from 11 to 1
         playerAceCount -= 1;
     }
     return playerSum;
