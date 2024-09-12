@@ -1,44 +1,75 @@
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     text-align: center;
-    background-color: #2d2d2d;
-    color: #ffffff;
+    background-color: #1b1b1b; /* Darker background for a more elegant casino feel */
+    color: #f8f8f8;
+    padding: 20px;
 }
 
 h2 {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    font-size: 28px;
+    color: #ffd700; /* Gold color for headings, representing wealth and luxury */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8); /* Adding some shadow for depth */
 }
 
 #dealer-cards, #your-cards {
     display: flex;
     justify-content: center;
+    gap: 15px;
+    padding: 20px;
+    background-color: #2d2d2d;
+    border-radius: 15px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.7); /* Soft shadow for a floating effect */
+    margin: 15px auto;
+    width: fit-content;
 }
 
 #dealer-cards img, #your-cards img {
-    height: 175px;
-    width: 125px;
-    margin: 10px;
-    border-radius: 8px;
-    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.5);
+    height: 180px;
+    width: 130px;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.8); /* Strong shadow for card depth */
+    border: 2px solid #ffd700; /* Golden border around cards */
 }
 
 button {
-    width: 120px;
-    height: 50px;
-    font-size: 20px;
-    margin: 10px;
+    width: 150px;
+    height: 55px;
+    font-size: 22px;
+    margin: 20px;
     border: none;
-    border-radius: 5px;
-    background-color: #4CAF50;
-    color: white;
+    border-radius: 30px;
+    background-color: #e74c3c; /* Bright red, a common casino color */
+    color: #ffffff;
     cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.4); /* Button shadow for a raised look */
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #c0392b; /* Darker red on hover for depth */
+    transform: translateY(-5px); /* Slight lift effect on hover */
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.7);
 }
 
 #results {
-    font-size: 24px;
-    margin-top: 20px;
+    font-size: 26px;
+    margin-top: 25px;
+    color: #00ff99; /* Bright neon green for game result message */
+    text-shadow: 1px 1px 10px rgba(0, 255, 153, 0.8); /* Neon glow effect */
+}
+
+#dealer-sum, #your-sum {
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #ffd700; /* Gold for the scores */
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+#hidden {
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.8);
+    border: 2px solid #ffd700;
 }

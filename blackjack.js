@@ -59,12 +59,39 @@ function startGame() {
         document.getElementById("your-cards").append(cardImg);
     }
 
-    document.getElementById("hit").addEventListener("click", hit);
-    document.getElementById("stay").addEventListener("click", stay);
-
     // Update player's sum, adjusting for Ace values
     yourSum = reduceAce(yourSum, yourAceCount);
     document.getElementById("your-sum").innerText = yourSum;
+
+    // Enable game actions
+    document.getElementById("hit").addEventListener("click", hit);
+    document.getElementById("stay").addEventListener("click", stay);
+}
+
+function checkForBlackjack() {
+    // Check if player has a Blackjack
+    if (yourSum === 21 && yourAceCount === 1 && deck.length >= 2) {
+        // Player has Blackjack
+        if (dealerSum === 21 && dealerAceCount === 1) {
+            // Both player and dealer have Blackjack
+            document.getElementById("results").innerText = "Blackjack Tie!";
+        } else {
+            // Only player has Blackjack
+            document.getElementById("results").innerText = "Blackjack! You Win!";
+        }
+        canHit = false; // End the game if the player has Blackjack
+        return;
+    }
+
+    // Check if dealer has a Blackjack
+    if (dealerSum === 21 && dealerAceCount === 1) {
+        // Dealer has Blackjack
+        if (yourSum !== 21 || yourAceCount !== 1) {
+            document.getElementById("results").innerText = "Dealer has Blackjack! You Lose!";
+            canHit = false; // End the game if the dealer has Blackjack
+            return;
+        }
+    }
 }
 
 function hit() {
@@ -125,13 +152,24 @@ function playDealerTurn() {
 }
 
 function endGame() {
+    // Reveal hidden dealer card
+    document.getElementById("hidden").src = "./cards/" + hidden + ".png";
+
+    // Update dealer's sum after revealing the hidden card
+    dealerSum = reduceAce(dealerSum, dealerAceCount);
+    document.getElementById("dealer-sum").innerText = dealerSum; // Show dealer's sum right away
+
     let message = "";
 
     if (yourSum > 21) {
         message = "You Lose!";
     } else if (dealerSum > 21) {
         message = "Dealer Busts! You Win!";
-    } else if (yourSum == dealerSum) {
+    } else if (yourSum === 21 && yourAceCount === 1 && dealerSum === 21 && dealerAceCount === 1) {
+        message = "Blackjack Tie!";
+    } else if (dealerSum === 21 && dealerAceCount === 1) {
+        message = "Dealer has Blackjack! You Lose!";
+    } else if (yourSum === dealerSum) {
         message = "Tie!";
     } else if (yourSum > dealerSum) {
         message = "You Win!";
