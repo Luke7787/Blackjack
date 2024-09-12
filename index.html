@@ -40,15 +40,17 @@
         <img id="hidden" src="./cards/BACK.png">
     </div>
 
-    <!-- Player's Hand -->
-    <h2>You: <span id="your-sum"></span></h2>
-    <div id="your-cards"></div>
+    <!-- Player's Hand(s) -->
+    <div id="your-hands">
+        <!-- Hands will be dynamically inserted here -->
+    </div>
 
     <!-- Game Controls -->
     <br>
     <button id="hit" disabled>Hit</button>
     <button id="stay" disabled>Stay</button>
-    <button id="double" disabled>Double</button> <!-- Added Double Button -->
+    <button id="double" disabled>Double</button>
+    <button id="split" disabled>Split</button> <!-- Added Split Button -->
     <button id="new-game" style="display:none;">New Game</button>
     <p id="results"></p>
 </body>

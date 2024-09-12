@@ -1,9 +1,7 @@
 // Global Variables
 let dealerSum = 0;
-let yourSum = 0;
 
 let dealerAceCount = 0;
-let yourAceCount = 0;
 
 let hidden;
 let deck;
@@ -13,7 +11,13 @@ let canHit = true; // Player can draw cards while their total is <= 21
 let balance = 100; // Starting balance
 let betAmount = 0;
 
-let doubledDown = false; // New variable to track if the player has doubled down
+let doubledDown = false; // Tracks if the player has doubled down
+let currentHandIndex = 0; // Tracks which hand the player is currently playing
+let playerHands = []; // Array to hold player hands
+let playerSums = []; // Array to hold sums for each hand
+let playerAceCounts = []; // Array to hold ace counts for each hand
+let handBets = []; // Array to hold bet amounts for each hand
+let handFinished = []; // Array to track if a hand is finished
 
 // Initialize Game
 window.onload = function() {
@@ -30,7 +34,8 @@ window.onload = function() {
     document.getElementById("place-bet").addEventListener("click", placeBet);
     document.getElementById("hit").addEventListener("click", hit);
     document.getElementById("stay").addEventListener("click", stay);
-    document.getElementById("double").addEventListener("click", doubleDown); // Add event listener for Double
+    document.getElementById("double").addEventListener("click", doubleDown);
+    document.getElementById("split").addEventListener("click", splitHand);
     document.getElementById("new-game").addEventListener("click", resetGame);
 };
 
@@ -79,7 +84,8 @@ function placeBet() {
     // Enable game controls
     document.getElementById("hit").disabled = false;
     document.getElementById("stay").disabled = false;
-    document.getElementById("double").disabled = false; // Enable Double button
+    document.getElementById("double").disabled = false;
+    document.getElementById("split").disabled = false;
 
     startGame();
 }
@@ -98,63 +104,257 @@ function startGame() {
     dealerCardImg.src = "./cards/" + dealerCard + ".png";
     document.getElementById("dealer-cards").append(dealerCardImg);
 
-    // Player's initial cards (two face-up)
+    // Player's initial hand
+    playerHands = [[]]; // Initialize with one hand
+    playerSums = [0];
+    playerAceCounts = [0];
+    handBets = [betAmount];
+    handFinished = [false];
+    currentHandIndex = 0;
+
+    // Deal two cards to the player's first hand
     for (let i = 0; i < 2; i++) {
-        let card = deck.pop();
-        yourSum += getValue(card);
-        yourAceCount += checkAce(card);
-        let cardImg = document.createElement("img");
-        cardImg.src = "./cards/" + card + ".png";
-        document.getElementById("your-cards").append(cardImg);
+        hitCard(currentHandIndex, false);
     }
 
-    // Update player's sum, adjusting for Ace values
-    yourSum = reduceAce(yourSum, yourAceCount);
-    document.getElementById("your-sum").innerText = yourSum;
+    updateHandDisplay();
 
     // Check for initial Blackjack
-    if (yourSum === 21) {
+    if (playerSums[currentHandIndex] === 21) {
         canHit = false;
         document.getElementById("hit").disabled = true;
         document.getElementById("stay").disabled = true;
         document.getElementById("double").disabled = true;
+        document.getElementById("split").disabled = true;
         revealHiddenCard();
         setTimeout(endGame, 1000);
+    }
+
+    // Check if split is possible
+    checkSplitOption();
+}
+
+// Function to deal a card to a specific hand
+function hitCard(handIndex, isPlayerAction) {
+    let card = deck.pop();
+    let hand = playerHands[handIndex];
+    hand.push(card);
+
+    playerSums[handIndex] += getValue(card);
+    playerAceCounts[handIndex] += checkAce(card);
+
+    playerSums[handIndex] = reduceAce(playerSums[handIndex], playerAceCounts[handIndex]);
+
+    if (isPlayerAction) {
+        updateHandDisplay();
+        document.getElementById(`your-sum-${handIndex}`).innerText = playerSums[handIndex];
+
+        // Check for bust
+        if (playerSums[handIndex] > 21) {
+            handFinished[handIndex] = true;
+            nextHand();
+        } else if (playerSums[handIndex] === 21) {
+            handFinished[handIndex] = true;
+            nextHand();
+        }
+    }
+}
+
+// Player chooses to "Hit"
+function hit() {
+    if (!canHit) return;
+
+    hitCard(currentHandIndex, true);
+
+    // After hitting, disable Double and Split options
+    document.getElementById("double").disabled = true;
+    document.getElementById("split").disabled = true;
+}
+
+// Player chooses to "Stay"
+function stay() {
+    handFinished[currentHandIndex] = true;
+    nextHand();
+}
+
+// Proceed to the next hand or dealer's turn if all hands are finished
+function nextHand() {
+    // Check if there is another hand to play
+    if (currentHandIndex < playerHands.length - 1) {
+        currentHandIndex++;
+        updateHandDisplay();
+
+        // Reset buttons for the next hand
+        canHit = true;
+        document.getElementById("hit").disabled = false;
+        document.getElementById("stay").disabled = false;
+        document.getElementById("double").disabled = false;
+
+        // Check if split is possible on the new hand
+        checkSplitOption();
+    } else {
+        // All hands are played, proceed to dealer's turn
+        canHit = false;
+        document.getElementById("hit").disabled = true;
+        document.getElementById("stay").disabled = true;
+        document.getElementById("double").disabled = true;
+        document.getElementById("split").disabled = true;
+
+        revealHiddenCard();
+        setTimeout(playDealerTurn, 1000);
     }
 }
 
 // Player chooses to "Double"
 function doubleDown() {
-    if (balance < betAmount) {
+    if (balance < handBets[currentHandIndex]) {
         alert("You do not have enough balance to double down.");
         return;
     }
 
-    // Double the bet amount
-    balance -= betAmount;
-    betAmount *= 2;
+    // Double the bet amount for the current hand
+    balance -= handBets[currentHandIndex];
+    handBets[currentHandIndex] *= 2;
     updateBalanceDisplay();
-    document.getElementById("current-bet").innerText = betAmount.toFixed(2);
+    updateBetDisplay();
 
-    // Disable Double button to prevent multiple doubles
+    // Disable Double and Split buttons
     document.getElementById("double").disabled = true;
+    document.getElementById("split").disabled = true;
 
     // Set doubledDown flag
     doubledDown = true;
 
     // Player receives one more card
-    hit();
+    hitCard(currentHandIndex, true);
 
     // After doubling down, player cannot hit again
     canHit = false;
     document.getElementById("hit").disabled = true;
 
-    // Proceed to dealer's turn after a short delay
-    setTimeout(() => {
-        document.getElementById("stay").disabled = true;
-        revealHiddenCard();
-        setTimeout(playDealerTurn, 1000);
-    }, 500);
+    // Proceed to next hand or dealer's turn
+    handFinished[currentHandIndex] = true;
+    setTimeout(nextHand, 500);
+}
+
+// Player chooses to "Split"
+function splitHand() {
+    if (balance < handBets[currentHandIndex]) {
+        alert("You do not have enough balance to split.");
+        return;
+    }
+
+    let hand = playerHands[currentHandIndex];
+    let firstCard = hand[0];
+    let secondCard = hand[1];
+
+    // Create two new hands
+    playerHands[currentHandIndex] = [firstCard]; // Update current hand
+    playerHands.splice(currentHandIndex + 1, 0, [secondCard]); // Insert new hand
+
+    // Update bets for both hands
+    handBets.splice(currentHandIndex + 1, 0, handBets[currentHandIndex]);
+    balance -= handBets[currentHandIndex];
+    updateBalanceDisplay();
+
+    // Reset sums and ace counts for both hands
+    playerSums[currentHandIndex] = getValue(firstCard);
+    playerAceCounts[currentHandIndex] = checkAce(firstCard);
+
+    playerSums.splice(currentHandIndex + 1, 0, getValue(secondCard));
+    playerAceCounts.splice(currentHandIndex + 1, 0, checkAce(secondCard));
+
+    handFinished.splice(currentHandIndex + 1, 0, false);
+
+    // Deal one more card to each hand
+    hitCard(currentHandIndex, false);
+    hitCard(currentHandIndex + 1, false);
+
+    updateHandDisplay();
+
+    // After splitting, disable Double and Split buttons for this hand
+    document.getElementById("double").disabled = true;
+    document.getElementById("split").disabled = true;
+}
+
+// Update the display of player's hands
+function updateHandDisplay() {
+    let yourHandsDiv = document.getElementById("your-hands");
+    yourHandsDiv.innerHTML = '';
+
+    if (playerHands.length === 1) {
+        // Display as single hand without "Hand 1"
+        let handDiv = document.createElement("div");
+        handDiv.className = "hand";
+        handDiv.id = `hand-0`;
+
+        let h2 = document.createElement("h2");
+        h2.innerText = `You: `;
+        let sumSpan = document.createElement("span");
+        sumSpan.id = `your-sum-0`;
+        sumSpan.innerText = playerSums[0];
+        h2.appendChild(sumSpan);
+        handDiv.appendChild(h2);
+
+        let cardsDiv = document.createElement("div");
+        cardsDiv.className = "cards";
+        for (let card of playerHands[0]) {
+            let cardImg = document.createElement("img");
+            cardImg.src = "./cards/" + card + ".png";
+            cardsDiv.appendChild(cardImg);
+        }
+        handDiv.appendChild(cardsDiv);
+
+        yourHandsDiv.appendChild(handDiv);
+    } else {
+        // Multiple hands, display with "Hand 1", "Hand 2", etc.
+        for (let i = 0; i < playerHands.length; i++) {
+            let handDiv = document.createElement("div");
+            handDiv.className = "hand";
+            handDiv.id = `hand-${i}`;
+
+            let handTitle = document.createElement("h3");
+            handTitle.innerText = `Hand ${i + 1}: `;
+            if (i === currentHandIndex) {
+                handTitle.style.color = "#00ff99"; // Highlight current hand
+            }
+            handDiv.appendChild(handTitle);
+
+            let sumSpan = document.createElement("span");
+            sumSpan.id = `your-sum-${i}`;
+            sumSpan.innerText = playerSums[i];
+            handTitle.appendChild(sumSpan);
+
+            let cardsDiv = document.createElement("div");
+            cardsDiv.className = "cards";
+            for (let card of playerHands[i]) {
+                let cardImg = document.createElement("img");
+                cardImg.src = "./cards/" + card + ".png";
+                cardsDiv.appendChild(cardImg);
+            }
+            handDiv.appendChild(cardsDiv);
+
+            yourHandsDiv.appendChild(handDiv);
+        }
+    }
+
+    updateBetDisplay();
+}
+
+// Update the current bet display
+function updateBetDisplay() {
+    let totalBet = handBets.reduce((a, b) => a + b, 0);
+    document.getElementById("current-bet").innerText = totalBet.toFixed(2);
+}
+
+// Check if the player can split their hand
+function checkSplitOption() {
+    let hand = playerHands[currentHandIndex];
+    if (hand.length === 2 && getValue(hand[0]) === getValue(hand[1])) {
+        document.getElementById("split").disabled = false;
+    } else {
+        document.getElementById("split").disabled = true;
+    }
 }
 
 // Reveal the dealer's hidden card
@@ -164,50 +364,6 @@ function revealHiddenCard() {
     // Update dealer's sum after revealing the hidden card
     dealerSum = reduceAce(dealerSum, dealerAceCount);
     document.getElementById("dealer-sum").innerText = dealerSum;
-}
-
-// Player chooses to "Hit"
-function hit() {
-    if (!canHit) return;
-
-    let card = deck.pop();
-    yourSum += getValue(card);
-    yourAceCount += checkAce(card);
-
-    let cardImg = document.createElement("img");
-    cardImg.src = "./cards/" + card + ".png";
-    document.getElementById("your-cards").append(cardImg);
-
-    yourSum = reduceAce(yourSum, yourAceCount);
-    document.getElementById("your-sum").innerText = yourSum;
-
-    if (yourSum > 21) {
-        canHit = false;
-        document.getElementById("hit").disabled = true;
-        document.getElementById("stay").disabled = true;
-        document.getElementById("double").disabled = true;
-        revealHiddenCard();
-        setTimeout(endGame, 1000);
-    } else if (yourSum === 21) {
-        canHit = false;
-        document.getElementById("hit").disabled = true;
-        document.getElementById("stay").disabled = true;
-        document.getElementById("double").disabled = true;
-        revealHiddenCard();
-        setTimeout(endGame, 1000);
-    }
-}
-
-// Player chooses to "Stay"
-function stay() {
-    canHit = false;
-    document.getElementById("hit").disabled = true;
-    document.getElementById("stay").disabled = true;
-    document.getElementById("double").disabled = true;
-
-    revealHiddenCard();
-    // Dealer's turn
-    setTimeout(playDealerTurn, 1000);
 }
 
 // Dealer's turn logic
@@ -234,19 +390,25 @@ function playDealerTurn() {
 function endGame() {
     let message = "";
 
-    if (yourSum > 21) {
-        message = "You Bust! You Lose!";
-    } else if (dealerSum > 21) {
-        message = "Dealer Busts! You Win!";
-        balance += betAmount * 2;
-    } else if (yourSum === dealerSum) {
-        message = "It's a Tie!";
-        balance += betAmount; // Return the bet
-    } else if (yourSum > dealerSum) {
-        message = "You Win!";
-        balance += betAmount * 2;
-    } else {
-        message = "You Lose!";
+    for (let i = 0; i < playerHands.length; i++) {
+        let result = "";
+
+        if (playerSums[i] > 21) {
+            result = `Hand ${i + 1}: You Bust! You Lose!`;
+        } else if (dealerSum > 21) {
+            result = `Hand ${i + 1}: Dealer Busts! You Win!`;
+            balance += handBets[i] * 2;
+        } else if (playerSums[i] === dealerSum) {
+            result = `Hand ${i + 1}: It's a Tie!`;
+            balance += handBets[i]; // Return the bet
+        } else if (playerSums[i] > dealerSum) {
+            result = `Hand ${i + 1}: You Win!`;
+            balance += handBets[i] * 2;
+        } else {
+            result = `Hand ${i + 1}: You Lose!`;
+        }
+
+        message += result + "\n";
     }
 
     // Update balance and display message
@@ -260,6 +422,7 @@ function endGame() {
     document.getElementById("hit").disabled = true;
     document.getElementById("stay").disabled = true;
     document.getElementById("double").disabled = true;
+    document.getElementById("split").disabled = true;
 
     // Reset doubledDown flag
     doubledDown = false;
@@ -276,6 +439,7 @@ function endGame() {
         document.getElementById("hit").style.display = "none";
         document.getElementById("stay").style.display = "none";
         document.getElementById("double").style.display = "none";
+        document.getElementById("split").style.display = "none";
     }
 }
 
@@ -337,24 +501,33 @@ function addFunds() {
     document.getElementById("hit").style.display = "inline-block";
     document.getElementById("stay").style.display = "inline-block";
     document.getElementById("double").style.display = "inline-block";
+    document.getElementById("split").style.display = "inline-block";
 }
 
 // Reset the game for a new round
 function resetGame() {
     // Reset variables
     dealerSum = 0;
-    yourSum = 0;
+
     dealerAceCount = 0;
-    yourAceCount = 0;
-    betAmount = 0;
+
+    hidden = null;
+    deck = [];
+
     canHit = true;
+    betAmount = 0;
     doubledDown = false;
+    currentHandIndex = 0;
+    playerHands = [];
+    playerSums = [];
+    playerAceCounts = [];
+    handBets = [];
+    handFinished = [];
 
     // Clear UI elements
     document.getElementById("dealer-cards").innerHTML = '<img id="hidden" src="./cards/BACK.png">';
-    document.getElementById("your-cards").innerHTML = '';
+    document.getElementById("your-hands").innerHTML = '';
     document.getElementById("dealer-sum").innerText = '';
-    document.getElementById("your-sum").innerText = '';
     document.getElementById("results").innerText = '';
     document.getElementById("bet-input").value = '';
 
@@ -368,6 +541,7 @@ function resetGame() {
     document.getElementById("hit").disabled = true;
     document.getElementById("stay").disabled = true;
     document.getElementById("double").disabled = true;
+    document.getElementById("split").disabled = true;
 
     // Hide New Game button and show bet container
     document.getElementById("new-game").style.display = "none";
