@@ -3,11 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blackjack</title>
+    <title>Luke's Casino</title>
     <link rel="stylesheet" href="blackjack.css">
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <script src="blackjack.js" defer></script>
 </head>
 <body>
+    <!-- Main Title -->
+    <h1>Luke Zhuang's Casino</h1>
+
     <!-- Balance and Add Funds Section -->
     <div id="balance-container">
         <h2>Balance: $<span id="balance">0</span></h2>
@@ -36,6 +41,7 @@
 
     <!-- Dealer's Hand -->
     <h2>Dealer: <span id="dealer-sum"></span></h2>
+    <!-- Dealer Cards -->
     <div id="dealer-cards">
         <img id="hidden" src="./cards/BACK.png">
     </div>
@@ -50,8 +56,27 @@
     <button id="hit" disabled>Hit</button>
     <button id="stay" disabled>Stay</button>
     <button id="double" disabled>Double</button>
-    <button id="split" disabled>Split</button> <!-- Added Split Button -->
+    <button id="split" disabled>Split</button>
     <button id="new-game" style="display:none;">New Game</button>
     <p id="results"></p>
+
+    <!-- Social Media Icons -->
+    <div class="ending-icons">
+        <a href="https://github.com/Luke7787" target="_blank">
+            <span class="ending-icon-container">
+                <i class="fab fa-github"></i>
+            </span>
+        </a>
+        <a href="https://www.linkedin.com/in/zhuangluke/" target="_blank">
+            <span class="ending-icon-container">
+                <i class="fab fa-linkedin"></i>
+            </span>
+        </a>
+        <a href="https://www.facebook.com/luke.zhuang/" target="_blank">
+            <span class="ending-icon-container">
+                <i class="fab fa-facebook"></i>
+            </span>
+        </a>
+    </div>
 </body>
 </html>

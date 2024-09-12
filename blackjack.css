@@ -276,3 +276,56 @@ button:hover {
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.8);
     border: 2px solid #ffd700;
 }
+/* Updated Social Media Icons Styles */
+.ending-icons {
+    position: fixed; /* Fix the position relative to the viewport */
+    top: 50%; /* Position vertically centered */
+    right: 20px; /* Position 20px from the right */
+    transform: translateY(-50%); /* Adjust for vertical centering */
+}
+
+.ending-icons a {
+    margin: 1rem 0; /* Add margin to separate the icons vertically */
+    display: block; /* Make each icon take up the full width (for vertical stacking) */
+    text-decoration: none; 
+}
+
+.ending-icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px; 
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.25); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ending-icons i {
+    font-size: 30px; /* Adjusted font size to fit the layout */
+    color: #1E90FF; 
+    transition: color 0.3s ease; 
+}
+
+.ending-icons a:hover i {
+    color: white; 
+}
+
+.ending-icon-container:hover {
+    transform: scale(1.1);
+    background-color: #1E90FF;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); 
+}
+
+/* Style for the main heading */
+h1 {
+    text-align: center;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* Hover effect for the main heading */
+h1:hover {
+    transform: scale(1.05);
+    color: #1E90FF;
+}
