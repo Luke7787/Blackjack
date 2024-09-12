@@ -13,6 +13,8 @@ let canHit = true; // Player can draw cards while their total is <= 21
 let balance = 100; // Starting balance
 let betAmount = 0;
 
+let doubledDown = false; // New variable to track if the player has doubled down
+
 // Initialize Game
 window.onload = function() {
     // Build and shuffle deck
@@ -28,6 +30,7 @@ window.onload = function() {
     document.getElementById("place-bet").addEventListener("click", placeBet);
     document.getElementById("hit").addEventListener("click", hit);
     document.getElementById("stay").addEventListener("click", stay);
+    document.getElementById("double").addEventListener("click", doubleDown); // Add event listener for Double
     document.getElementById("new-game").addEventListener("click", resetGame);
 };
 
@@ -76,6 +79,7 @@ function placeBet() {
     // Enable game controls
     document.getElementById("hit").disabled = false;
     document.getElementById("stay").disabled = false;
+    document.getElementById("double").disabled = false; // Enable Double button
 
     startGame();
 }
@@ -113,9 +117,44 @@ function startGame() {
         canHit = false;
         document.getElementById("hit").disabled = true;
         document.getElementById("stay").disabled = true;
+        document.getElementById("double").disabled = true;
         revealHiddenCard();
         setTimeout(endGame, 1000);
     }
+}
+
+// Player chooses to "Double"
+function doubleDown() {
+    if (balance < betAmount) {
+        alert("You do not have enough balance to double down.");
+        return;
+    }
+
+    // Double the bet amount
+    balance -= betAmount;
+    betAmount *= 2;
+    updateBalanceDisplay();
+    document.getElementById("current-bet").innerText = betAmount.toFixed(2);
+
+    // Disable Double button to prevent multiple doubles
+    document.getElementById("double").disabled = true;
+
+    // Set doubledDown flag
+    doubledDown = true;
+
+    // Player receives one more card
+    hit();
+
+    // After doubling down, player cannot hit again
+    canHit = false;
+    document.getElementById("hit").disabled = true;
+
+    // Proceed to dealer's turn after a short delay
+    setTimeout(() => {
+        document.getElementById("stay").disabled = true;
+        revealHiddenCard();
+        setTimeout(playDealerTurn, 1000);
+    }, 500);
 }
 
 // Reveal the dealer's hidden card
@@ -146,12 +185,14 @@ function hit() {
         canHit = false;
         document.getElementById("hit").disabled = true;
         document.getElementById("stay").disabled = true;
+        document.getElementById("double").disabled = true;
         revealHiddenCard();
         setTimeout(endGame, 1000);
     } else if (yourSum === 21) {
         canHit = false;
         document.getElementById("hit").disabled = true;
         document.getElementById("stay").disabled = true;
+        document.getElementById("double").disabled = true;
         revealHiddenCard();
         setTimeout(endGame, 1000);
     }
@@ -162,6 +203,7 @@ function stay() {
     canHit = false;
     document.getElementById("hit").disabled = true;
     document.getElementById("stay").disabled = true;
+    document.getElementById("double").disabled = true;
 
     revealHiddenCard();
     // Dealer's turn
@@ -217,6 +259,10 @@ function endGame() {
     // Disable game controls
     document.getElementById("hit").disabled = true;
     document.getElementById("stay").disabled = true;
+    document.getElementById("double").disabled = true;
+
+    // Reset doubledDown flag
+    doubledDown = false;
 
     // Hide the current bet display
     document.getElementById("current-bet-container").style.display = "none";
@@ -229,6 +275,7 @@ function endGame() {
         // Hide game controls
         document.getElementById("hit").style.display = "none";
         document.getElementById("stay").style.display = "none";
+        document.getElementById("double").style.display = "none";
     }
 }
 
@@ -289,6 +336,7 @@ function addFunds() {
     // Show game controls again
     document.getElementById("hit").style.display = "inline-block";
     document.getElementById("stay").style.display = "inline-block";
+    document.getElementById("double").style.display = "inline-block";
 }
 
 // Reset the game for a new round
@@ -300,6 +348,7 @@ function resetGame() {
     yourAceCount = 0;
     betAmount = 0;
     canHit = true;
+    doubledDown = false;
 
     // Clear UI elements
     document.getElementById("dealer-cards").innerHTML = '<img id="hidden" src="./cards/BACK.png">';
@@ -318,6 +367,7 @@ function resetGame() {
     // Disable game controls
     document.getElementById("hit").disabled = true;
     document.getElementById("stay").disabled = true;
+    document.getElementById("double").disabled = true;
 
     // Hide New Game button and show bet container
     document.getElementById("new-game").style.display = "none";
