@@ -1,6 +1,4 @@
-# Luke Zhuang's Blackjack Game
-
-Check out the live version of the game here: [Luke Zhuang's Blackjack](https://luke7787.github.io/Blackjack/)
+# LIVE Version of the Game Here: [LUKE ZHUANG'S BLACKJACK](https://luke7787.github.io/Blackjack/)
 
 ## Introduction
 
