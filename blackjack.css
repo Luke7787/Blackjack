@@ -76,8 +76,21 @@ button:hover {
 
 /* Styling for balance and add funds section */
 #balance-container {
-    margin: 20px;
+    margin: 20px auto;
     font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center; /* Vertically center the items */
+    justify-content: center; /* Center the container */
+    max-width: 400px; /* Limit the width */
+    gap: 20px; /* Space between items */
+}
+
+/* Balance Text Styling */
+#balance-container h2 {
+    margin: 0; /* Remove default margins */
+    font-size: 24px;
+    color: #ffd700; /* Gold color for balance */
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 }
 
 #balance {
@@ -161,35 +174,57 @@ button:hover {
 
 /* Styling for the bet container */
 #bet-container {
-    margin: 20px;
+    margin: 20px auto;
     font-family: Arial, sans-serif;
     text-align: center;
+    max-width: 350px; /* Set a maximum width */
+    background-color: #2d2d2d; /* Match the casino theme */
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Heading styling */
+#bet-container h3 {
+    margin-bottom: 20px;
+    color: #ffd700; /* Gold color */
+    font-size: 24px;
+    font-weight: bold;
 }
 
 /* Input field for bet amount */
 #bet-input {
-    padding: 12px;
+    padding: 12px 20px;
     border: 1px solid #ddd;
     border-radius: 6px;
-    font-size: 16px;
-    width: 80%;
-    box-sizing: border-box;
+    font-size: 18px;
+    width: calc(100% - 50px); /* Adjust width to fit within the container */
     margin-bottom: 20px;
     outline: none;
 }
 
-/* Button styling */
-#place-bet {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-    color: #fff;
-    background-color: #007bff;
-    transition: background-color 0.3s ease;
+/* Input field focus styling */
+#bet-input:focus {
+    border-color: #ffd700;
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
 }
 
+/* Button styling */
+#place-bet {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 30px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #fff;
+    background-color: #e74c3c; /* Bright red */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Button hover effect */
 #place-bet:hover {
-    background-color: #0056b3;
+    background-color: #c0392b; /* Darker red */
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
 }
