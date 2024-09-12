@@ -8,11 +8,13 @@
     <script src="blackjack.js" defer></script>
 </head>
 <body>
+    <!-- Balance and Add Funds Section -->
     <div id="balance-container">
         <h2>Balance: $<span id="balance">0</span></h2>
         <button id="add-funds-btn">Add Funds</button>
     </div>
 
+    <!-- Add Funds Modal -->
     <div id="add-funds-container">
         <h3>Add Funds</h3>
         <input type="number" id="add-funds" placeholder="Enter amount" />
@@ -20,43 +22,28 @@
         <button id="cancel-add">Cancel</button>
     </div>
 
+    <!-- Betting Section -->
+    <div id="bet-container">
+        <h3>Place Your Bet</h3>
+        <input type="number" id="bet-input" placeholder="Enter bet amount" />
+        <button id="place-bet">Place Bet</button>
+    </div>
+
+    <!-- Dealer's Hand -->
     <h2>Dealer: <span id="dealer-sum"></span></h2>
     <div id="dealer-cards">
         <img id="hidden" src="./cards/BACK.png">
     </div>
 
+    <!-- Player's Hand -->
     <h2>You: <span id="your-sum"></span></h2>
     <div id="your-cards"></div>
 
+    <!-- Game Controls -->
     <br>
-    <button id="hit">Hit</button>
-    <button id="stay">Stay</button>
+    <button id="hit" disabled>Hit</button>
+    <button id="stay" disabled>Stay</button>
+    <button id="new-game" style="display:none;">New Game</button>
     <p id="results"></p>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Initialize Add Funds Button
-            document.getElementById("add-funds-btn").addEventListener("click", function() {
-                document.getElementById("add-funds-container").style.display = "block";
-            });
-
-            // Initialize Cancel Button
-            document.getElementById("cancel-add").addEventListener("click", function() {
-                document.getElementById("add-funds-container").style.display = "none";
-            });
-
-            // Initialize Confirm Button
-            document.getElementById("confirm-add").addEventListener("click", function() {
-                let amount = parseFloat(document.getElementById("add-funds").value);
-                if (isNaN(amount) || amount <= 0) {
-                    alert("Please enter a valid amount.");
-                    return;
-                }
-                balance += amount;
-                updateBalanceDisplay();
-                document.getElementById("add-funds-container").style.display = "none";
-            });
-        });
-    </script>
 </body>
 </html>
