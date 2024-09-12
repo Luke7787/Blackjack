@@ -2,12 +2,12 @@ let dealerSum = 0;
 let yourSum = 0;
 
 let dealerAceCount = 0;
-let yourAceCount = 0; 
+let yourAceCount = 0;
 
 let hidden;
 let deck;
 
-let canHit = true; // Player can draw cards while the total is <= 21
+let canHit = true; // Player can draw cards while their total is <= 21
 
 window.onload = function() {
     buildDeck();
@@ -41,7 +41,7 @@ function startGame() {
     hidden = deck.pop();
     dealerSum += getValue(hidden);
     dealerAceCount += checkAce(hidden);
-    
+
     let dealerCard = deck.pop();
     dealerSum += getValue(dealerCard);
     dealerAceCount += checkAce(dealerCard);
@@ -90,20 +90,34 @@ function stay() {
     // Reveal hidden dealer card
     document.getElementById("hidden").src = "./cards/" + hidden + ".png";
 
+    // Update dealer's sum after revealing the hidden card
     dealerSum = reduceAce(dealerSum, dealerAceCount);
-    yourSum = reduceAce(yourSum, yourAceCount);
+    document.getElementById("dealer-sum").innerText = dealerSum; // Show dealer's sum right away
 
-    while (dealerSum < 17) { // Dealer hits until 17 or more
-        let card = deck.pop();
-        dealerSum += getValue(card);
-        dealerAceCount += checkAce(card);
-        let cardImg = document.createElement("img");
-        cardImg.src = "./cards/" + card + ".png";
-        document.getElementById("dealer-cards").append(cardImg);
-    }
+    // Start dealer's play after revealing the hidden card with a slight delay
+    setTimeout(() => {
+        playDealerTurn();
+    }, 1000); // 1-second delay before starting dealer's turn
+}
 
-    document.getElementById("dealer-sum").innerText = dealerSum;
-    endGame();
+function playDealerTurn() {
+    let dealerTurnInterval = setInterval(() => {
+        if (dealerSum < 17) {
+            let card = deck.pop();
+            dealerSum += getValue(card);
+            dealerAceCount += checkAce(card);
+            let cardImg = document.createElement("img");
+            cardImg.src = "./cards/" + card + ".png";
+            document.getElementById("dealer-cards").append(cardImg);
+
+            // Update dealer's sum after each card drawn
+            dealerSum = reduceAce(dealerSum, dealerAceCount);
+            document.getElementById("dealer-sum").innerText = dealerSum;
+        } else {
+            clearInterval(dealerTurnInterval); // Stop drawing when dealerSum >= 17
+            endGame(); // End the game after dealer finishes drawing
+        }
+    }, 1000); // Delay between dealer card draws (1 second)
 }
 
 function endGame() {
@@ -122,7 +136,6 @@ function endGame() {
     }
 
     document.getElementById("results").innerText = message;
-    document.getElementById("dealer-sum").innerText = dealerSum;
 }
 
 function getValue(card) {
