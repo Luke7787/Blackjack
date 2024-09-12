@@ -84,23 +84,7 @@ button:hover {
     font-size: 24px;
 }
 
-#add-funds-container {
-    display: none;
-    position: absolute;
-    top: 20%;
-    left: 20%;
-    padding: 20px;
-    border: 2px solid #000;
-    background-color: #fff;
-    z-index: 1000;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
-}
-
-#add-funds-container input {
-    margin-right: 10px;
-}
-
-/* Enhanced styling for the add funds container */
+/* Styling for the add funds container */
 #add-funds-container {
     display: none;
     position: fixed;
@@ -108,53 +92,71 @@ button:hover {
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 30px;
-    border-radius: 10px;
-    border: 2px solid #333;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     z-index: 1000;
-    font-family: Arial, sans-serif;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
     text-align: center;
+    max-width: 400px;
+    width: 100%;
 }
 
+/* Heading styling */
 #add-funds-container h3 {
-    margin-bottom: 15px;
-    color: #333;
-}
-
-#add-funds-container input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    width: 70%;
     margin-bottom: 20px;
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
 }
 
+/* Input field styling */
+#add-funds-container input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    width: 80%;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    outline: none;
+}
+
+/* Input field focus styling */
+#add-funds-container input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Button styling */
 #add-funds-container button {
-    padding: 10px 20px;
+    padding: 12px 24px;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     font-size: 16px;
     cursor: pointer;
     margin: 0 10px;
+    color: #fff;
+    transition: background-color 0.3s ease;
 }
 
+/* Confirm button styling */
 #confirm-add {
-    background-color: #4CAF50;
-    color: white;
-}
-
-#cancel-add {
-    background-color: #f44336;
-    color: white;
+    background-color: #28a745;
 }
 
 #confirm-add:hover {
-    background-color: #45a049;
+    background-color: #218838;
+}
+
+/* Cancel button styling */
+#cancel-add {
+    background-color: #dc3545;
 }
 
 #cancel-add:hover {
-    background-color: #e53935;
+    background-color: #c82333;
 }
+
 
