@@ -72,10 +72,11 @@ function startGame() {
         // Player has Blackjack
         document.getElementById("results").innerText = "Blackjack! Please wait for dealer to finish.";
         canHit = false;
+        // Reveal the hidden dealer card and let the dealer play
         setTimeout(() => {
             revealHiddenCard();
             playDealerTurn();
-        }, 1000); // 1-second delay before dealer's turn
+        }, 1000); // 1-second delay before dealer's turn starts
     }
 }
 
@@ -143,25 +144,23 @@ function playDealerTurn() {
 
 function endGame() {
     // If the game is over, we check for the final results
-    if (document.getElementById("results").innerText === "") {
-        let message = "";
+    let message = "";
 
-        if (yourSum > 21) {
-            message = "You Lose!";
-        } else if (dealerSum > 21) {
-            message = "Dealer Busts! You Win!";
-        } else if (dealerSum === 21 && dealerAceCount === 1 && (yourSum !== 21 || yourAceCount !== 1)) {
-            message = "Dealer has Blackjack! You Lose!";
-        } else if (yourSum === dealerSum) {
-            message = "Tie!";
-        } else if (yourSum > dealerSum) {
-            message = "You Win!";
-        } else {
-            message = "You Lose!";
-        }
-
-        document.getElementById("results").innerText = message;
+    if (yourSum > 21) {
+        message = "You Lose!";
+    } else if (dealerSum > 21) {
+        message = "Dealer Busts! You Win!";
+    } else if (dealerSum === 21 && dealerAceCount === 1 && (yourSum !== 21 || yourAceCount !== 1)) {
+        message = "Dealer has Blackjack! You Lose!";
+    } else if (yourSum === dealerSum) {
+        message = "Tie!";
+    } else if (yourSum > dealerSum) {
+        message = "You Win!";
+    } else {
+        message = "You Lose!";
     }
+
+    document.getElementById("results").innerText = message;
 }
 
 function getValue(card) {
