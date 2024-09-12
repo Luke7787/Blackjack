@@ -1,5 +1,7 @@
 # Luke Zhuang's Blackjack Game
 
+Check out the live version of the game here: [Luke Zhuang's Blackjack](https://luke7787.github.io/Blackjack/)
+
 ## Introduction
 
 Welcome to my Blackjack game! This project showcases my skills in web development, focusing on HTML, CSS, and JavaScript. The motivation behind this project was to practice and enhance my abilities while creating a fun and interactive game that mimics the classic casino experience.
