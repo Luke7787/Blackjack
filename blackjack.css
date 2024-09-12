@@ -1,4 +1,4 @@
-body {
+body { 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     text-align: center;
     background-color: #1b1b1b; /* Darker background for a more elegant casino feel */
@@ -95,6 +95,22 @@ button:hover {
 
 #balance {
     font-size: 24px;
+}
+
+/* Current Bet Container Styling */
+#current-bet-container {
+    display: none; /* Hide by default */
+    margin: 10px auto;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    max-width: 400px;
+}
+
+#current-bet-container h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #ffd700; /* Gold color for the bet amount */
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 }
 
 /* Styling for the add funds container */

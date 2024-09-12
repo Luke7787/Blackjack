@@ -64,6 +64,13 @@ function placeBet() {
     betAmount = bet;
     balance -= betAmount; // Deduct bet from balance temporarily
     updateBalanceDisplay();
+
+    // Update the current bet display
+    document.getElementById("current-bet").innerText = betAmount.toFixed(2);
+
+    // Show the current bet display
+    document.getElementById("current-bet-container").style.display = "block";
+
     document.getElementById("bet-container").style.display = "none";
 
     // Enable game controls
@@ -206,6 +213,23 @@ function endGame() {
 
     // Show New Game button
     document.getElementById("new-game").style.display = "inline-block";
+
+    // Disable game controls
+    document.getElementById("hit").disabled = true;
+    document.getElementById("stay").disabled = true;
+
+    // Hide the current bet display
+    document.getElementById("current-bet-container").style.display = "none";
+
+    // Check if player has run out of funds
+    if (balance <= 0) {
+        alert("You have run out of funds. Please add more funds to continue playing.");
+        showAddFunds();
+
+        // Hide game controls
+        document.getElementById("hit").style.display = "none";
+        document.getElementById("stay").style.display = "none";
+    }
 }
 
 // Calculate the value of a card
@@ -261,6 +285,10 @@ function addFunds() {
     balance += amount;
     updateBalanceDisplay();
     hideAddFunds();
+
+    // Show game controls again
+    document.getElementById("hit").style.display = "inline-block";
+    document.getElementById("stay").style.display = "inline-block";
 }
 
 // Reset the game for a new round
@@ -280,6 +308,12 @@ function resetGame() {
     document.getElementById("your-sum").innerText = '';
     document.getElementById("results").innerText = '';
     document.getElementById("bet-input").value = '';
+
+    // Hide the current bet display
+    document.getElementById("current-bet-container").style.display = "none";
+
+    // Reset the current bet display value
+    document.getElementById("current-bet").innerText = '0.00';
 
     // Disable game controls
     document.getElementById("hit").disabled = true;
