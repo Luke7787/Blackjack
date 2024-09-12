@@ -1,7 +1,7 @@
 body { 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     text-align: center;
-    background-color: #1b1b1b; /* Darker background for a more elegant casino feel */
+    background-color: #1b1b1b;
     color: #f8f8f8;
     padding: 20px;
 }
@@ -9,8 +9,8 @@ body {
 h2 {
     margin-bottom: 15px;
     font-size: 28px;
-    color: #ffd700; /* Gold color for headings, representing wealth and luxury */
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8); /* Adding some shadow for depth */
+    color: #ffd700; 
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8); 
 }
 
 #dealer-cards, #your-cards {
@@ -20,7 +20,7 @@ h2 {
     padding: 20px;
     background-color: #2d2d2d;
     border-radius: 15px;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.7); /* Soft shadow for a floating effect */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.7); 
     margin: 15px auto;
     width: fit-content;
 }
@@ -29,8 +29,8 @@ h2 {
     height: 180px;
     width: 130px;
     border-radius: 10px;
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.8); /* Strong shadow for card depth */
-    border: 2px solid #ffd700; /* Golden border around cards */
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.8); 
+    border: 2px solid #ffd700; 
 }
 
 button {
@@ -40,31 +40,31 @@ button {
     margin: 20px;
     border: none;
     border-radius: 30px;
-    background-color: #e74c3c; /* Bright red, a common casino color */
+    background-color: #e74c3c; 
     color: #ffffff;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.4); /* Button shadow for a raised look */
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.4); 
 }
 
 button:hover {
-    background-color: #c0392b; /* Darker red on hover for depth */
-    transform: translateY(-5px); /* Slight lift effect on hover */
+    background-color: #c0392b; 
+    transform: translateY(-5px); 
     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.7);
 }
 
 #results {
     font-size: 26px;
     margin-top: 25px;
-    color: #00ff99; /* Bright neon green for game result message */
-    text-shadow: 1px 1px 10px rgba(0, 255, 153, 0.8); /* Neon glow effect */
+    color: #00ff99; 
+    text-shadow: 1px 1px 10px rgba(0, 255, 153, 0.8); 
 }
 
 #dealer-sum, #your-sum {
     font-size: 22px;
     font-weight: bold;
     margin-top: 10px;
-    color: #ffd700; /* Gold for the scores */
+    color: #ffd700; 
     text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 }
 
@@ -74,22 +74,20 @@ button:hover {
     border: 2px solid #ffd700;
 }
 
-/* Styling for balance and add funds section */
 #balance-container {
     margin: 20px auto;
     font-family: Arial, sans-serif;
     display: flex;
-    align-items: center; /* Vertically center the items */
-    justify-content: center; /* Center the container */
-    max-width: 400px; /* Limit the width */
-    gap: 20px; /* Space between items */
+    align-items: center; 
+    justify-content: center; 
+    max-width: 400px; 
+    gap: 20px;
 }
 
-/* Balance Text Styling */
 #balance-container h2 {
-    margin: 0; /* Remove default margins */
+    margin: 0; 
     font-size: 24px;
-    color: #ffd700; /* Gold color for balance */
+    color: #ffd700; 
     text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 }
 
@@ -97,9 +95,8 @@ button:hover {
     font-size: 24px;
 }
 
-/* Current Bet Container Styling */
 #current-bet-container {
-    display: none; /* Hide by default */
+    display: none;
     margin: 10px auto;
     font-family: Arial, sans-serif;
     text-align: center;
@@ -109,11 +106,10 @@ button:hover {
 #current-bet-container h2 {
     margin: 0;
     font-size: 24px;
-    color: #ffd700; /* Gold color for the bet amount */
+    color: #ffd700; 
     text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 }
 
-/* Styling for the add funds container */
 #add-funds-container {
     display: none;
     position: fixed;
@@ -132,7 +128,6 @@ button:hover {
     width: 100%;
 }
 
-/* Heading styling */
 #add-funds-container h3 {
     margin-bottom: 20px;
     color: #333;
@@ -140,7 +135,6 @@ button:hover {
     font-weight: 600;
 }
 
-/* Input field styling */
 #add-funds-container input {
     padding: 12px;
     border: 1px solid #ddd;
@@ -152,13 +146,11 @@ button:hover {
     outline: none;
 }
 
-/* Input field focus styling */
 #add-funds-container input:focus {
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
-/* Button styling */
 #add-funds-container button {
     padding: 12px 24px;
     border: none;
@@ -170,7 +162,6 @@ button:hover {
     transition: background-color 0.3s ease;
 }
 
-/* Confirm button styling */
 #confirm-add {
     background-color: #28a745;
 }
@@ -179,7 +170,6 @@ button:hover {
     background-color: #218838;
 }
 
-/* Cancel button styling */
 #cancel-add {
     background-color: #dc3545;
 }
@@ -188,44 +178,39 @@ button:hover {
     background-color: #c82333;
 }
 
-/* Styling for the bet container */
 #bet-container {
     margin: 20px auto;
     font-family: Arial, sans-serif;
     text-align: center;
-    max-width: 350px; /* Set a maximum width */
-    background-color: #2d2d2d; /* Match the casino theme */
+    max-width: 350px; 
+    background-color: #2d2d2d; 
     padding: 25px;
     border-radius: 12px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Heading styling */
 #bet-container h3 {
     margin-bottom: 20px;
-    color: #ffd700; /* Gold color */
+    color: #ffd700; 
     font-size: 24px;
     font-weight: bold;
 }
 
-/* Input field for bet amount */
 #bet-input {
     padding: 12px 20px;
     border: 1px solid #ddd;
     border-radius: 6px;
     font-size: 18px;
-    width: calc(100% - 50px); /* Adjust width to fit within the container */
+    width: calc(100% - 50px); 
     margin-bottom: 20px;
     outline: none;
 }
 
-/* Input field focus styling */
 #bet-input:focus {
     border-color: #ffd700;
     box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
 }
 
-/* Button styling */
 #place-bet {
     padding: 12px 30px;
     border: none;
@@ -233,19 +218,17 @@ button:hover {
     font-size: 20px;
     cursor: pointer;
     color: #fff;
-    background-color: #e74c3c; /* Bright red */
+    background-color: #e74c3c; 
     transition: background-color 0.3s ease, transform 0.2s ease;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* Button hover effect */
 #place-bet:hover {
-    background-color: #c0392b; /* Darker red */
+    background-color: #c0392b; 
     transform: translateY(-4px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
 }
 
-/* Styling for player hands */
 #your-hands {
     display: flex;
     flex-direction: column;
@@ -276,17 +259,17 @@ button:hover {
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.8);
     border: 2px solid #ffd700;
 }
-/* Updated Social Media Icons Styles */
+
 .ending-icons {
-    position: fixed; /* Fix the position relative to the viewport */
-    top: 50%; /* Position vertically centered */
-    right: 20px; /* Position 20px from the right */
-    transform: translateY(-50%); /* Adjust for vertical centering */
+    position: fixed; 
+    top: 50%;
+    right: 20px; 
+    transform: translateY(-50%); 
 }
 
 .ending-icons a {
-    margin: 1rem 0; /* Add margin to separate the icons vertically */
-    display: block; /* Make each icon take up the full width (for vertical stacking) */
+    margin: 1rem 0; 
+    display: block;
     text-decoration: none; 
 }
 
@@ -303,7 +286,7 @@ button:hover {
 }
 
 .ending-icons i {
-    font-size: 30px; /* Adjusted font size to fit the layout */
+    font-size: 30px;
     color: #1E90FF; 
     transition: color 0.3s ease; 
 }
@@ -318,13 +301,11 @@ button:hover {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); 
 }
 
-/* Style for the main heading */
 h1 {
     text-align: center;
     transition: transform 0.3s ease, color 0.3s ease;
 }
 
-/* Hover effect for the main heading */
 h1:hover {
     transform: scale(1.05);
     color: #1E90FF;

@@ -21,7 +21,8 @@ window.onload = function() {
     buildDeck();
     shuffleDeck();
 
-    updateBalanceDisplay(); // Show initial balance
+    // Show initial balance
+    updateBalanceDisplay();
 
     // Add event listeners
     document.getElementById("add-funds-btn").addEventListener("click", showAddFunds);
@@ -66,7 +67,8 @@ function placeBet() {
         return;
     }
     betAmount = bet;
-    balance -= betAmount; // Deduct bet from balance temporarily
+    // Deduct bet from balance temporarily
+    balance -= betAmount;
     updateBalanceDisplay();
 
     // Update the current bet display
@@ -101,12 +103,12 @@ function startGame() {
     document.getElementById("dealer-cards").append(dealerCardImg);
 
     // Player's initial hand
-    playerHands = [[]]; // Initialize with one hand
+    playerHands = [[]];
     playerSums = [0];
     playerAceCounts = [0];
     handBets = [betAmount];
     handFinished = [false];
-    isBlackjack = [false]; // Initialize isBlackjack array
+    isBlackjack = [false];
     currentHandIndex = 0;
 
     // Deal two cards to the player's first hand
@@ -118,7 +120,7 @@ function startGame() {
 
     // Check for initial Blackjack
     if (playerSums[currentHandIndex] === 21 && playerHands[currentHandIndex].length === 2) {
-        isBlackjack[currentHandIndex] = true; // Set Blackjack flag
+        isBlackjack[currentHandIndex] = true;
         canHit = false;
         document.getElementById("hit").disabled = true;
         document.getElementById("stay").disabled = true;
