@@ -70,36 +70,22 @@ function startGame() {
     // Check if player has a Blackjack initially
     if (yourSum === 21 && yourAceCount === 1) {
         // Player has Blackjack
-        document.getElementById("results").innerText = "Blackjack! You Win!";
+        document.getElementById("results").innerText = "Blackjack! Please wait for dealer to finish.";
         canHit = false;
-        return;
+        setTimeout(() => {
+            revealHiddenCard();
+            playDealerTurn();
+        }, 1000); // 1-second delay before dealer's turn
     }
 }
 
-function checkForBlackjack() {
-    // Check if player has a Blackjack
-    if (yourSum === 21 && yourAceCount === 1 && deck.length >= 2) {
-        // Player has Blackjack
-        if (dealerSum === 21 && dealerAceCount === 1) {
-            // Both player and dealer have Blackjack
-            document.getElementById("results").innerText = "Blackjack Tie!";
-        } else {
-            // Only player has Blackjack
-            document.getElementById("results").innerText = "Blackjack! You Win!";
-        }
-        canHit = false; // End the game if the player has Blackjack
-        return;
-    }
+function revealHiddenCard() {
+    // Reveal hidden dealer card
+    document.getElementById("hidden").src = "./cards/" + hidden + ".png";
 
-    // Check if dealer has a Blackjack
-    if (dealerSum === 21 && dealerAceCount === 1) {
-        // Dealer has Blackjack
-        if (yourSum !== 21 || yourAceCount !== 1) {
-            document.getElementById("results").innerText = "Dealer has Blackjack! You Lose!";
-            canHit = false; // End the game if the dealer has Blackjack
-            return;
-        }
-    }
+    // Update dealer's sum after revealing the hidden card
+    dealerSum = reduceAce(dealerSum, dealerAceCount);
+    document.getElementById("dealer-sum").innerText = dealerSum; // Show dealer's sum right away
 }
 
 function hit() {
@@ -126,19 +112,8 @@ function hit() {
 function stay() {
     canHit = false;
 
-    // Check if the player has Blackjack
-    if (yourSum === 21 && yourAceCount === 1) {
-        // Player has Blackjack
-        document.getElementById("results").innerText = "Blackjack! You Win!";
-        return;
-    }
-
     // Reveal hidden dealer card
-    document.getElementById("hidden").src = "./cards/" + hidden + ".png";
-
-    // Update dealer's sum after revealing the hidden card
-    dealerSum = reduceAce(dealerSum, dealerAceCount);
-    document.getElementById("dealer-sum").innerText = dealerSum; // Show dealer's sum right away
+    revealHiddenCard();
 
     // Start dealer's play after revealing the hidden card with a slight delay
     setTimeout(() => {
