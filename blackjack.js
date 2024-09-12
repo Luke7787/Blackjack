@@ -16,6 +16,11 @@ window.onload = function() {
     shuffleDeck();
     startGame();
     updateBalanceDisplay(); // Show initial balance
+
+    // Add event listeners
+    document.getElementById("add-funds-btn").addEventListener("click", showAddFunds);
+    document.getElementById("confirm-add").addEventListener("click", addFunds);
+    document.getElementById("cancel-add").addEventListener("click", hideAddFunds);
 };
 
 function buildDeck() {
