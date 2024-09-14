@@ -105,6 +105,11 @@ function startGame() {
     dealerCardImg.src = "./cards/" + dealerCard + ".png";
     document.getElementById("dealer-cards").append(dealerCardImg);
 
+    // Adjust dealer's sum and Ace count
+    let dealerResult = reduceAce(dealerSum, dealerAceCount);
+    dealerSum = dealerResult.sum;
+    dealerAceCount = dealerResult.aceCount;
+
     // Player's initial hand
     playerHands = [[]];
     playerSums = [0];
@@ -133,11 +138,8 @@ function startGame() {
         // Reveal dealer's hidden card
         revealHiddenCard();
 
-        // Check if dealer also has Blackjack
-        setTimeout(() => {
-            let dealerHasBlackjack = dealerSum === 21 && dealerAceCount > 0 && dealerHasTwoCards();
-            endGame();
-        }, 1000);
+        // Proceed to endGame
+        setTimeout(endGame, 1000);
     } else {
         // Check if split is possible
         checkSplitOption();
@@ -153,17 +155,17 @@ function hitCard(handIndex, isPlayerAction) {
     playerSums[handIndex] += getValue(card);
     playerAceCounts[handIndex] += checkAce(card);
 
-    playerSums[handIndex] = reduceAce(playerSums[handIndex], playerAceCounts[handIndex]);
+    // Adjust for Aces
+    let result = reduceAce(playerSums[handIndex], playerAceCounts[handIndex]);
+    playerSums[handIndex] = result.sum;
+    playerAceCounts[handIndex] = result.aceCount;
 
     if (isPlayerAction) {
         updateHandDisplay();
         document.getElementById(`your-sum-${handIndex}`).innerText = playerSums[handIndex];
 
-        // Check for bust
-        if (playerSums[handIndex] > 21) {
-            handFinished[handIndex] = true;
-            nextHand();
-        } else if (playerSums[handIndex] === 21) {
+        // Check for bust or 21
+        if (playerSums[handIndex] > 21 || playerSums[handIndex] === 21) {
             handFinished[handIndex] = true;
             nextHand();
         }
@@ -372,8 +374,11 @@ function checkSplitOption() {
 function revealHiddenCard() {
     document.getElementById("hidden").src = "./cards/" + hidden + ".png";
 
-    // Update dealer's sum after revealing the hidden card
-    dealerSum = reduceAce(dealerSum, dealerAceCount);
+    // Adjust dealer's sum and Ace count
+    let result = reduceAce(dealerSum, dealerAceCount);
+    dealerSum = result.sum;
+    dealerAceCount = result.aceCount;
+
     document.getElementById("dealer-sum").innerText = dealerSum;
 }
 
@@ -388,7 +393,11 @@ function playDealerTurn() {
             cardImg.src = "./cards/" + card + ".png";
             document.getElementById("dealer-cards").append(cardImg);
 
-            dealerSum = reduceAce(dealerSum, dealerAceCount);
+            // Adjust dealer's sum and Ace count
+            let result = reduceAce(dealerSum, dealerAceCount);
+            dealerSum = result.sum;
+            dealerAceCount = result.aceCount;
+
             document.getElementById("dealer-sum").innerText = dealerSum;
         } else {
             clearInterval(dealerTurnInterval);
@@ -500,7 +509,10 @@ function reduceAce(playerSum, playerAceCount) {
         playerSum -= 10; // Convert an Ace from 11 to 1
         playerAceCount -= 1;
     }
-    return playerSum;
+    return {
+        sum: playerSum,
+        aceCount: playerAceCount
+    };
 }
 
 // Update the displayed balance
