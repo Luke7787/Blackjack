@@ -20,12 +20,12 @@
     </div>
 
     <!-- Current Bet Display -->
-    <div id="current-bet-container">
+    <div id="current-bet-container" style="display: none;">
         <h2>Current Bet: $<span id="current-bet">0.00</span></h2>
     </div>
 
     <!-- Add Funds Modal -->
-    <div id="add-funds-container">
+    <div id="add-funds-container" style="display: none;">
         <h3>Add Funds</h3>
         <input type="number" id="add-funds" placeholder="Enter amount" />
         <button id="confirm-add">Add</button>
@@ -58,6 +58,9 @@
     <button id="double" disabled>Double</button>
     <button id="split" disabled>Split</button>
     <button id="new-game" style="display:none;">New Game</button>
+    <button id="replay-game" style="display:none;">
+        <i class="fas fa-sync-alt"></i> Replay
+    </button>
     <p id="results"></p>
 
     <!-- Social Media Icons -->

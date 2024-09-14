@@ -34,6 +34,9 @@ window.onload = function() {
     document.getElementById("double").addEventListener("click", doubleDown);
     document.getElementById("split").addEventListener("click", splitHand);
     document.getElementById("new-game").addEventListener("click", resetGame);
+
+    // Add event listener for Replay button
+    document.getElementById("replay-game").addEventListener("click", replayGame);
 };
 
 // Build a standard 52-card deck
@@ -132,15 +135,8 @@ function startGame() {
 
         // Check if dealer also has Blackjack
         setTimeout(() => {
-            // Dealer's turn is not needed if dealer's initial hand is a natural Blackjack
             let dealerHasBlackjack = dealerSum === 21 && dealerAceCount > 0 && dealerHasTwoCards();
-            if (dealerHasBlackjack) {
-                // Dealer has Blackjack
-                endGame();
-            } else {
-                // Proceed to endGame
-                endGame();
-            }
+            endGame();
         }, 1000);
     } else {
         // Check if split is possible
@@ -450,8 +446,9 @@ function endGame() {
     updateBalanceDisplay();
     document.getElementById("results").innerText = message;
 
-    // Show New Game button
+    // Show New Game and Replay Game buttons
     document.getElementById("new-game").style.display = "inline-block";
+    document.getElementById("replay-game").style.display = "inline-block";
 
     // Disable game controls
     document.getElementById("hit").disabled = true;
@@ -576,8 +573,9 @@ function resetGame() {
     document.getElementById("double").disabled = true;
     document.getElementById("split").disabled = true;
 
-    // Hide New Game button and show bet container
+    // Hide New Game and Replay Game buttons and show bet container
     document.getElementById("new-game").style.display = "none";
+    document.getElementById("replay-game").style.display = "none";
     document.getElementById("bet-container").style.display = "block";
 
     // Rebuild and shuffle the deck
@@ -589,4 +587,69 @@ function resetGame() {
         alert("You have run out of funds. Please add more funds to continue playing.");
         showAddFunds();
     }
+}
+
+// Function to replay the game with the same bet amount
+function replayGame() {
+    // Reset variables similar to resetGame(), but keep betAmount
+    dealerSum = 0;
+    dealerAceCount = 0;
+    hidden = null;
+    deck = [];
+    canHit = true;
+    doubledDown = false;
+    currentHandIndex = 0;
+    playerHands = [];
+    playerSums = [];
+    playerAceCounts = [];
+    handBets = [];
+    handFinished = [];
+    isBlackjack = [];
+
+    // Clear UI elements
+    document.getElementById("dealer-cards").innerHTML = '<img id="hidden" src="./cards/BACK.png">';
+    document.getElementById("your-hands").innerHTML = '';
+    document.getElementById("dealer-sum").innerText = '';
+    document.getElementById("results").innerText = '';
+
+    // Show the current bet display
+    document.getElementById("current-bet-container").style.display = "block";
+
+    // Update the current bet display
+    document.getElementById("current-bet").innerText = betAmount.toFixed(2);
+
+    // Disable game controls
+    document.getElementById("hit").disabled = true;
+    document.getElementById("stay").disabled = true;
+    document.getElementById("double").disabled = true;
+    document.getElementById("split").disabled = true;
+
+    // Hide New Game and Replay Game buttons
+    document.getElementById("new-game").style.display = "none";
+    document.getElementById("replay-game").style.display = "none";
+
+    // Rebuild and shuffle the deck
+    buildDeck();
+    shuffleDeck();
+
+    // Check if player has enough balance to cover the betAmount
+    if (balance < betAmount) {
+        alert("You do not have enough balance to place the same bet. Please add more funds or place a smaller bet.");
+        // Show bet container to allow the player to place a new bet
+        document.getElementById("bet-container").style.display = "block";
+        return;
+    }
+
+    // Deduct bet from balance temporarily
+    balance -= betAmount;
+    updateBalanceDisplay();
+
+    // Enable game controls
+    document.getElementById("hit").disabled = false;
+    document.getElementById("stay").disabled = false;
+    document.getElementById("double").disabled = false;
+    document.getElementById("split").disabled = false;
+
+    // Start the game
+    startGame();
 }
