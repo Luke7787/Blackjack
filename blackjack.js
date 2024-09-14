@@ -1,4 +1,4 @@
-// Global Variables
+// Global Variables 
 let dealerSum = 0;
 let dealerAceCount = 0;
 let hidden;
@@ -14,6 +14,7 @@ let playerAceCounts = []; // Array to hold ace counts for each hand
 let handBets = []; // Array to hold bet amounts for each hand
 let handFinished = []; // Array to track if a hand is finished
 let isBlackjack = []; // Array to track natural Blackjack for each hand
+let dealerHiddenCardRevealed = false; // Tracks if the dealer's hidden card is revealed
 
 // Initialize Game
 window.onload = function() {
@@ -189,6 +190,16 @@ function stay() {
     nextHand();
 }
 
+// Function to check if all player hands are busted
+function areAllHandsBusted() {
+    for (let i = 0; i < playerSums.length; i++) {
+        if (playerSums[i] <= 21) {
+            return false; // At least one hand is not busted
+        }
+    }
+    return true; // All hands are busted
+}
+
 // Proceed to the next hand or dealer's turn if all hands are finished
 function nextHand() {
     // Check if there is another hand to play
@@ -205,15 +216,23 @@ function nextHand() {
         // Check if split is possible on the new hand
         checkSplitOption();
     } else {
-        // All hands are played, proceed to dealer's turn
+        // All hands are played
         canHit = false;
         document.getElementById("hit").disabled = true;
         document.getElementById("stay").disabled = true;
         document.getElementById("double").disabled = true;
         document.getElementById("split").disabled = true;
 
-        revealHiddenCard();
-        setTimeout(playDealerTurn, 1000);
+        if (areAllHandsBusted()) {
+            // Do not reveal the dealer's hidden card
+            setTimeout(endGame, 500);
+        } else {
+            // Reveal dealer's hidden card
+            revealHiddenCard();
+
+            // Proceed to dealer's turn
+            setTimeout(playDealerTurn, 1000);
+        }
     }
 }
 
@@ -244,7 +263,7 @@ function doubleDown() {
     canHit = false;
     document.getElementById("hit").disabled = true;
 
-    // Proceed to next hand or dealer's turn
+    // Proceed to next hand
     handFinished[currentHandIndex] = true;
     setTimeout(nextHand, 500);
 }
@@ -380,6 +399,9 @@ function revealHiddenCard() {
     dealerAceCount = result.aceCount;
 
     document.getElementById("dealer-sum").innerText = dealerSum;
+
+    // Set the flag to true
+    dealerHiddenCardRevealed = true;
 }
 
 // Dealer's turn logic
@@ -416,39 +438,46 @@ function dealerHasTwoCards() {
 function endGame() {
     let message = "";
 
-    // Check if dealer has natural Blackjack
-    let dealerHasBlackjack = dealerSum === 21 && dealerAceCount > 0 && dealerHasTwoCards();
-
-    for (let i = 0; i < playerHands.length; i++) {
-        let result = "";
-
-        if (isBlackjack[i]) { // Player has natural Blackjack
-            if (dealerHasBlackjack) {
-                result = `Hand ${i + 1}: Both have Blackjack! It's a Tie! Your bet is returned.`;
-                balance += handBets[i]; // Return the bet
-            } else {
-                result = `Hand ${i + 1}: Blackjack! You win 2.5x your bet!`;
-                balance += handBets[i] * 2.5; // Payout is 2.5 times the bet
-            }
-        } else if (dealerHasBlackjack) {
-            result = `Hand ${i + 1}: Dealer has Blackjack. You Lose!`;
-            // Player loses, do nothing
-        } else if (playerSums[i] > 21) {
-            result = `Hand ${i + 1}: You Bust!`;
-        } else if (dealerSum > 21) {
-            result = `Hand ${i + 1}: Dealer Busts! You win!`;
-            balance += handBets[i] * 2;
-        } else if (playerSums[i] === dealerSum) {
-            result = `Hand ${i + 1}: It's a Tie! Your bet is returned.`;
-            balance += handBets[i]; // Return the bet
-        } else if (playerSums[i] > dealerSum) {
-            result = `Hand ${i + 1}: You win!`;
-            balance += handBets[i] * 2;
-        } else {
-            result = `Hand ${i + 1}: You lose your bet.`;
+    if (!dealerHiddenCardRevealed) {
+        // Dealer's hidden card has not been revealed; player has busted
+        for (let i = 0; i < playerHands.length; i++) {
+            message += `Hand ${i + 1}: You Bust!\n`;
         }
+    } else {
+        // Proceed with normal end game logic
+        let dealerHasBlackjack = dealerSum === 21 && dealerAceCount > 0 && dealerHasTwoCards();
 
-        message += result + "\n";
+        for (let i = 0; i < playerHands.length; i++) {
+            let result = "";
+
+            if (isBlackjack[i]) { // Player has natural Blackjack
+                if (dealerHasBlackjack) {
+                    result = `Hand ${i + 1}: Both have Blackjack! It's a Tie! Your bet is returned.`;
+                    balance += handBets[i]; // Return the bet
+                } else {
+                    result = `Hand ${i + 1}: Blackjack! You win 2.5x your bet!`;
+                    balance += handBets[i] * 2.5; // Payout is 2.5 times the bet
+                }
+            } else if (playerSums[i] > 21) {
+                result = `Hand ${i + 1}: You Bust!`;
+            } else if (dealerHasBlackjack) {
+                result = `Hand ${i + 1}: Dealer has Blackjack. You Lose!`;
+                // Player loses, do nothing
+            } else if (dealerSum > 21) {
+                result = `Hand ${i + 1}: Dealer Busts! You win!`;
+                balance += handBets[i] * 2;
+            } else if (playerSums[i] === dealerSum) {
+                result = `Hand ${i + 1}: It's a Tie! Your bet is returned.`;
+                balance += handBets[i]; // Return the bet
+            } else if (playerSums[i] > dealerSum) {
+                result = `Hand ${i + 1}: You win!`;
+                balance += handBets[i] * 2;
+            } else {
+                result = `Hand ${i + 1}: You lose your bet.`;
+            }
+
+            message += result + "\n";
+        }
     }
 
     // Update balance and display message
@@ -565,6 +594,7 @@ function resetGame() {
     handBets = [];
     handFinished = [];
     isBlackjack = [];
+    dealerHiddenCardRevealed = false;
 
     // Clear UI elements
     document.getElementById("dealer-cards").innerHTML = '<img id="hidden" src="./cards/BACK.png">';
@@ -617,6 +647,7 @@ function replayGame() {
     handBets = [];
     handFinished = [];
     isBlackjack = [];
+    dealerHiddenCardRevealed = false;
 
     // Clear UI elements
     document.getElementById("dealer-cards").innerHTML = '<img id="hidden" src="./cards/BACK.png">';
