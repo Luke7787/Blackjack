@@ -310,3 +310,59 @@ h1:hover {
     transform: scale(1.05);
     color: #1E90FF;
 }
+
+/* Responsive adjustments for smaller devices */
+@media (max-width: 768px) {
+    /* 1. Hide the <h1> title */
+    h1 {
+        display: none;
+    }
+
+    .ending-icons {
+        position: static; /* Remove fixed positioning */
+        transform: none;  /* Reset transform */
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+    }
+
+    .ending-icon-container {
+        margin: 0 10px;
+    }
+
+    button#hit,
+    button#stay,
+    button#double,
+    button#split {
+        width: 20%;
+        margin: 10px 2%; /* 5px top/bottom, 2.5% left/right */
+        padding: 10px 0;
+        font-size: 18px;
+        border-radius: 25px;
+        box-sizing: border-box;
+        display: inline-block;
+    }
+
+    #balance-container {
+        max-width: 300px;        /* Reduce the maximum width */
+        gap: 10px;               /* Decrease the gap between elements */
+        padding: 10px 15px;      /* Add some padding for better spacing */
+        margin-top: -2.5rem;
+        margin-bottom: -1.75rem;
+    }
+
+    /* 2. Reduce Font Size of Balance Text */
+    #balance-container h2 {
+        font-size: 20px;         /* Smaller font size */
+        text-align: center;      /* Center the text */
+    }
+
+    /* 3. Adjust the Balance Number Font Size */
+    #balance {
+        font-size: 20px;         /* Smaller font size */
+    }
+
+    #dealer-cards, #your-cards {
+        margin-bottom: -1.75rem;
+    }
+}
