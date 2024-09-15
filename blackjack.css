@@ -334,7 +334,7 @@ h1:hover {
     button#stay,
     button#double,
     button#split {
-        width: 30%;
+        width: 40%;
         margin: 10px 2%; /* 5px top/bottom, 2.5% left/right */
         padding: 10px 0;
         font-size: 18px;
