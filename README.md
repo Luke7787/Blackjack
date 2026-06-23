@@ -1,4 +1,4 @@
-# Luke Zhuang's [Casino](https://luke7787.github.io/Blackjack/)
+**Live Site:** https://luke7787.github.io/Blackjack/
 
 Welcome to my Blackjack game! This project is built using the following tech stack: HTML, CSS, and JavaScript.
 
